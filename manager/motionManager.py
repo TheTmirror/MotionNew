@@ -43,6 +43,7 @@ class MotionManager:
             motion = dm.getMotion(filePath)
             self.__motions[motion.getName()] = motion
             self.__motionFiles[motion.getName()] = file
+            print(file)
 
         os.chdir(oldPath)
 
@@ -59,6 +60,7 @@ class MotionManager:
         path = None
         if motion.getName() in self.getAllMotionFiles():
             path = self.TEMPLATES_PATH + self.getMotionFile(motion.getName())
+            #print(path)
         else:
             i = 0
             plainPath = self.TEMPLATES_PATH + 'template'
@@ -73,9 +75,9 @@ class MotionManager:
             path = plainPath
 
         dm.saveMotion(motion, path)
-        if motion.getName() not in __motions:
-            __motions[motion.getName()] = motion
-            __motionFiles[motion.getName()] = path
+        if motion.getName() not in self.__motions:
+            self.__motions[motion.getName()] = motion
+            self.__motionFiles[motion.getName()] = path
 
         print('Motion Saved or Updated')
 

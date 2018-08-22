@@ -1,10 +1,11 @@
 #System
 import threading
+import time
 
 from ipc import IPCMemory
 
-from events import BaseEvent, RotationEvent, ButtonEvent, TouchEvent
-from events import EVENT_BASE, EVENT_ROTATE, EVENT_BUTTON, EVENT_TOUCH
+from events import BaseEvent, RotationEvent, ButtonEvent, TouchEvent, AboartEvent
+from events import EVENT_BASE, EVENT_ROTATE, EVENT_BUTTON, EVENT_TOUCH, EVENT_ABOART
 
 class Verification(threading.Thread):
 
@@ -20,6 +21,8 @@ class Verification(threading.Thread):
 
         self.sm = IPCMemory()
         self.smCounter = 0
+
+        self.currentTouches = 0
 
     def run(self):
         print('Started Verification')
@@ -49,6 +52,21 @@ class Verification(threading.Thread):
                 self.signals.append(event)
                 self.signalsLock.release()
 
+            #GGF in einen eigenen Event Thread? Achtung: Auf die Reihenfolge
+            #der Events dann achten. Nicht dass das Aboart Event for dem Touch
+            #Event auftritt und das Touch Release Event somit dann verloren geht
+            if isinstance(event, TouchEvent):
+                print(event.getValue())
+                if event.getValue() == 0:
+                    self.currentTouches = self.currentTouches - 1
+                    if self.currentTouches == 0:
+                        aboartEvent = AboartEvent(time.time())
+                        self.signalsLock.acquire()
+                        self.signals.append(aboartEvent)
+                        self.signalsLock.release()
+                else:
+                    self.currentTouches = self.currentTouches + 1
+
         self.cleanUp()
 
     def checkSharedMemory(self):
@@ -62,7 +80,7 @@ class Verification(threading.Thread):
                 time.sleep(2)
                 sys.exit()
             elif message == IPCMemory.NEW_MOTION:
-                print('A new Motion appeared')
+                #print('A new Motion appeared')
                 self.signalsLock.acquire()
                 del self.signals[:]
                 self.signalsLock.release()

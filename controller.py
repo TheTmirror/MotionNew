@@ -50,11 +50,6 @@ class Controller:
 
         #self.test1()
         #self.test2()
-        time.sleep(5)
-        print('Now')
-        self.signalsLock.acquire()
-        self.signals.append(AboartEvent(time.time()))
-        self.signalsLock.release()
         
         turnThread.join()
         touchThread.join()
