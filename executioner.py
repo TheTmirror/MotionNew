@@ -35,6 +35,7 @@ class Executioner(threading.Thread):
         #Wenn keine Motions vorhanden sind
         if not self.motionManager.getAllMotions():
             self.firstMotion = True
+            print("Bitte die erste Geste anlernen")
             self.startLearning()
         self.firstMotion = False
         self.startExecution()

@@ -10,7 +10,7 @@ sys.path.insert(0, '/home/pi/Desktop/Reworked Project/manager')
 sys.path.insert(0, '/home/pi/Desktop/Reworked Project/listener')
 
 #Project
-#from rest import RestServer
+from rest import RestServer
 
 from deviceManager import DeviceManager
 from motionManager import MotionManager
@@ -37,24 +37,24 @@ class Controller:
         self.bareSignals = []
         self.signals = []
         
-        turnThread = TurnListener(self.bareSignals, self.bareSignalsLock)
+        #turnThread = TurnListener(self.bareSignals, self.bareSignalsLock)
         touchThread = TouchListener(self.bareSignals, self.bareSignalsLock)
 
         verificationThread = Verification(self.bareSignals, self.bareSignalsLock, self.signals, self.signalsLock)
-        executionerThread = Executioner(self.signals, self.signalsLock)
+        #executionerThread = Executioner(self.signals, self.signalsLock)
         
-        turnThread.start()
+        #turnThread.start()
         touchThread.start()
         verificationThread.start()
-        executionerThread.start()
+        #executionerThread.start()
 
         #self.test1()
         #self.test2()
         
-        turnThread.join()
+        #turnThread.join()
         touchThread.join()
         verificationThread.join()
-        executionerThread.join()
+        #executionerThread.join()
         
         print('Controller wird beendet')
 

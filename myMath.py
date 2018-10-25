@@ -26,7 +26,7 @@ class Calculator:
         #print("IsDecimal: {} - Value: {}".format(isinstance(oddButton, Decimal), oddButton))
         #print("IsDecimal: {} - Value: {}".format(isinstance(oddTouch, Decimal), oddTouch))
 
-        odds = oddRotation * oddButton# * oddTouch
+        odds = oddRotation * oddButton * oddTouch
         #print("Odds beofre: {}".format(odds))
         odds = odds.normalize()
         #print("Odds after: {}".format(odds))
