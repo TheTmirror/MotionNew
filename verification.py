@@ -39,7 +39,7 @@ class Verification(threading.Thread):
     def startVerification(self):
         while True:
             self.checkSharedMemory()
-            #self.updateObservedTouchEvents()
+            self.updateObservedTouchEvents()
             #Read bareSignals
             self.bareSignalsLock.acquire()
             if not self.bareSignalsCounter < len(self.bareSignals):
@@ -51,8 +51,8 @@ class Verification(threading.Thread):
             self.bareSignalsLock.release()
 
             #Stromabbruch checken
-            #if isinstance(event, TouchEvent):
-            #    self.observeTouchEvent(event)
+            if isinstance(event, TouchEvent):
+                self.observeTouchEvent(event)
 
             #CheckIfItIsCorrect
             isValid = False
@@ -66,7 +66,7 @@ class Verification(threading.Thread):
             #GGF in einen eigenen Event Thread? Achtung: Auf die Reihenfolge
             #der Events dann achten. Nicht dass das Aboart Event for dem Touch
             #Event auftritt und das Touch Release Event somit dann verloren geht
-            self.touchedAreasAndAboartEvent(event)
+            #self.touchedAreasAndAboartEvent(event)
 
         self.cleanUp()
 
