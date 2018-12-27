@@ -73,7 +73,7 @@ class Verification(threading.Thread):
     def touchedAreasAndAboartEvent(self, event):
         tmpCurrentTouches = self.currentTouches
         if isinstance(event, TouchEvent):
-            print(event.getValue())
+            #print(event.getValue())
             if event.getValue() == 0:
                 self.currentTouches = self.currentTouches - 1
                 if self.currentTouches == 0:
@@ -103,7 +103,7 @@ class Verification(threading.Thread):
             self.touchEventsMetaInfo[event.getLocation()] = subDic
 
         subDic['event'] = event
-        print('added')
+        #print('added')
             
     def updateObservedTouchEvents(self):
         for key in self.touchEventsMetaInfo:
@@ -116,7 +116,7 @@ class Verification(threading.Thread):
                 if subDic['lastEventValue'] == None or subDic['lastEventValue'] != subDic['event'].getValue():
                     self.addEvent(subDic['event'])
                     self.touchedAreasAndAboartEvent(subDic['event'])
-                    print('finally')
+                    #print('finally')
                     subDic['lastEventValue'] = subDic['event'].getValue()
                     
     def checkSharedMemory(self):

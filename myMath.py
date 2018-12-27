@@ -27,6 +27,8 @@ class Calculator:
         #print("IsDecimal: {} - Value: {}".format(isinstance(oddTouch, Decimal), oddTouch))
 
         odds = oddRotation * oddButton * oddTouch
+        #print("ODDS")
+        #print(oddTouch)
         #print("Odds beofre: {}".format(odds))
         odds = odds.normalize()
         #print("Odds after: {}".format(odds))
@@ -155,7 +157,7 @@ class Calculator:
         
         #Falls der Button nie Benutzt wurde
         if length == 0:
-            print('Achtung der Button wurde nie gedrückt')
+            #print('Achtung der Button wurde nie gedrückt')
             return Decimal('0')
 
         for i in range(length):
