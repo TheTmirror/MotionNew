@@ -5,6 +5,7 @@ import sys
 
 #System Paths
 sys.path.insert(0, '/home/pi/Desktop/Reworked Project/manager')
+sys.path.insert(0, '/home/pi/Desktop/api/subscription')
 
 from events import BaseEvent, RotationEvent, ButtonEvent, AboartEvent
 from events import EVENT_BASE, EVENT_ROTATE, EVENT_BUTTON, EVENT_ABOART
@@ -14,6 +15,9 @@ from ipc import IPCMemory
 from transformer import MotionTransformer
 
 from motionManager import MotionManager
+
+from SubscriptionService import SubscriptionService
+from Event import Event
 
 class Executioner(threading.Thread):
 
@@ -29,6 +33,11 @@ class Executioner(threading.Thread):
 
         self.motionManager = MotionManager()
         self.firstMotion = False
+
+        ###
+        #Teil der Bachelorarbeit
+        self.subscriptionService = SubscriptionService()
+        ###
 
     def run(self):
         print('Executioner is running')
@@ -95,6 +104,17 @@ class Executioner(threading.Thread):
         if bestMatch == 'learningMotion':
             print('lerne')
             self.startLearning()
+
+        ###
+        #Teil der Bachelorarbeit
+        else:
+            print('Firing new event')
+            topic = 'newMotionEvent'
+            values = dict()
+            values['name'] = bestMatch
+            event = Event(topic, values)
+            self.subscriptionService.onEvent(event)
+        ###
 
     def startLearning(self):
         #Send all Signals to reset Inputs
