@@ -74,20 +74,23 @@ class Executioner(threading.Thread):
         knownMotions = self.motionManager.getAllMotions()
         bestMatch = None
         bestScore = None
+        print('')
         for knownMotionName in knownMotions:
             knownMotion = self.motionManager.getMotion(knownMotionName)
             score = calculator.getMatchingScore(motion, knownMotion)
 
-            print('{} - {}'.format(knownMotionName, score))
+            print('{} - {} %'.format(knownMotionName, score))
 
             if bestMatch == None or score > bestScore:
                 bestMatch = knownMotionName
                 bestScore = score
 
-        print('Den besten Match gab es mit: {} - {}'.format(bestMatch, bestScore))
+        print('')
+        print('Den besten Match gab es mit: {} - {} %'.format(bestMatch, bestScore))
 
         #Funktionalität der erkannten Geste ausführen
         print('Hier wird nun function.execute ausgeführt')
+        print('')
 
         if bestMatch == 'learningMotion':
             print('lerne')
