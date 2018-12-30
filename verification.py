@@ -32,6 +32,13 @@ class Verification(threading.Thread):
         self.touchEventsMetaInfo = dict()
         self.threshhold = 0.2
 
+        ###
+        #Bachelorarbeit
+        self.lastButton = None
+        self.intTimeout = 0.5
+        self.buttonTimeout = Decimal('{}'.format(self.intTimeout)).normalize()
+        ###
+
     def run(self):
         print('Started Verification')
         self.startVerification()
@@ -39,7 +46,11 @@ class Verification(threading.Thread):
     def startVerification(self):
         while True:
             self.checkSharedMemory()
-            self.updateObservedTouchEvents()
+            ###
+            #Bachelorarbeit Auskommentiert!!! Muss wieder rein!!!
+            #Braucht erstmal nur Rotation
+            #self.updateObservedTouchEvents()
+            ###
             #Read bareSignals
             self.bareSignalsLock.acquire()
             if not self.bareSignalsCounter < len(self.bareSignals):
@@ -51,13 +62,39 @@ class Verification(threading.Thread):
             self.bareSignalsLock.release()
 
             #Stromabbruch checken
-            if isinstance(event, TouchEvent):
-                self.observeTouchEvent(event)
+            ###
+            #Bachelorarbeit Auskommentiert!!! Muss wieder rein!!!
+            #if isinstance(event, TouchEvent):
+            #    self.observeTouchEvent(event)
+            ###
 
             #CheckIfItIsCorrect
             isValid = False
             if isinstance(event, RotationEvent) or isinstance(event, ButtonEvent):# or isinstance(event, TouchEvent):
                 isValid = True
+
+            ###
+            #Bachelorarbeit
+            if isinstance(event, ButtonEvent) and isValid and event.value == 0:
+                #print('New Button Event Release')
+                if self.lastButton is None:
+                    self.lastButton = event.getTime()
+                    #print('Erstes Event')
+                elif (Decimal('{}'.format(event.getTime())).normalize() - Decimal('{}'.format(self.lastButton)).normalize()) > self.buttonTimeout:
+                    self.lastButton = event.getTime()
+                    #print('Replaced Event')
+                else:
+                    #Es handelt sich um ein Doppelklick und ein Aboart Event muss generiert werden
+                    #print('Removing')
+                    aboartEvent = AboartEvent(time.time())
+                    self.signalsLock.acquire()
+                    self.signals.append(aboartEvent)
+                    #print('Put aboart')
+                    #print(self.signals)
+                    self.signalsLock.release()
+                    self.lastButton = None
+                    continue
+            ###
 
             #Put it into queue or delete it
             if isValid:
@@ -141,3 +178,27 @@ class Verification(threading.Thread):
 
     def cleanUp(self):
         print('Verfication finished')
+
+###
+#Bachelorarbeit
+if __name__ == '__main__':
+    bareSignalsLock = threading.Lock()
+    signalsLock = threading.Lock()
+    bareSignals = []
+    signals = []
+    
+    v = Verification(bareSignals, bareSignalsLock, signals, signalsLock)
+    v.start()
+
+    e1 = ButtonEvent(0, 1)
+    e2 = ButtonEvent(1.8, 0)
+    e3 = ButtonEvent(3.5, 1)
+    e4 = ButtonEvent(3.7, 1)
+
+    bareSignalsLock.acquire()
+    bareSignals.append(e1)
+    bareSignals.append(e2)
+    bareSignals.append(e3)
+    bareSignals.append(e4)
+    bareSignalsLock.release()
+###

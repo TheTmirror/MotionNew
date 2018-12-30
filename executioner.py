@@ -65,6 +65,10 @@ class Executioner(threading.Thread):
             self.signalsLock.release()
 
             if isinstance(event, AboartEvent):
+                ###
+                #Bachelorarbeit
+                self.removeRedundance()
+                ###
                 self.signalsLock.acquire()
                 signalsCopy = self.signals[:]
                 self.signalsLock.release()
@@ -134,6 +138,11 @@ class Executioner(threading.Thread):
             self.signalsLock.release()
 
             if isinstance(event, AboartEvent):
+                ###
+                #Bachelorarbeit
+                self.removeRedundance()
+                ###
+                
                 self.signalsLock.acquire()
                 signalsCopy = self.signals[:]
                 self.signalsLock.release()
@@ -163,6 +172,47 @@ class Executioner(threading.Thread):
         motion = transformer.transformMotion(signalsCopy)
 
         return motion
+
+    ###
+    #Bachelorarbeit
+    def removeRedundance(self):
+        self.signalsLock.acquire()
+        #Remove aboartEvent
+        del self.signals[-1]
+
+        #Remove allAboartButtonEvents
+        deleted = False
+        i = -1
+        while not deleted:
+            if isinstance(self.signals[i], ButtonEvent) and self.signals[i].value == 1:
+                #print('Found ButtonEvent with Value {} @ {}'.format(self.signals[i].value, i))
+                del self.signals[i]
+                deleted = True
+            else:
+                i = i - 1
+
+        deleted = False
+        i = -1
+        while not deleted:
+            if isinstance(self.signals[i], ButtonEvent) and self.signals[i].value == 0:
+                #print('Found ButtonEvent with Value {} @ {}'.format(self.signals[i].value, i))
+                del self.signals[i]
+                deleted = True
+            else:
+                i = i - 1
+
+        deleted = False
+        i = -1
+        while not deleted:
+            if isinstance(self.signals[i], ButtonEvent) and self.signals[i].value == 1:
+                #print('Found ButtonEvent with Value {} @ {}'.format(self.signals[i].value, i))
+                del self.signals[i]
+                deleted = True
+            else:
+                i = i - 1
+        
+        self.signalsLock.release()
+    ###
 
     def checkSharedMemory(self):
         import time

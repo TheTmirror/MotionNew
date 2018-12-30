@@ -48,12 +48,12 @@ class Controller:
         self.signals = []
         
         turnThread = TurnListener(self.bareSignals, self.bareSignalsLock)
-        touchThread = TouchListener(self.bareSignals, self.bareSignalsLock)
+        #touchThread = TouchListener(self.bareSignals, self.bareSignalsLock)
         verificationThread = Verification(self.bareSignals, self.bareSignalsLock, self.signals, self.signalsLock)
         executionerThread = Executioner(self.signals, self.signalsLock)
         
         turnThread.start()
-        touchThread.start()
+        #touchThread.start()
         verificationThread.start()
         executionerThread.start()
 
@@ -61,7 +61,7 @@ class Controller:
         #self.test2()
         
         turnThread.join()
-        touchThread.join()
+        #touchThread.join()
         verificationThread.join()
         executionerThread.join()
         
