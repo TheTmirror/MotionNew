@@ -8,6 +8,10 @@ from queue import Queue
 sys.path.insert(0, '/home/pi/Desktop/Griffin')
 sys.path.insert(0, '/home/pi/Desktop/Reworked Project/manager')
 sys.path.insert(0, '/home/pi/Desktop/Reworked Project/listener')
+###
+#Bachelorarbeit
+sys.path.insert(0, '/home/pi/Desktop/api')
+###
 
 #Project
 from rest import RestServer
@@ -22,9 +26,15 @@ from executioner import Executioner
 
 from events import AboartEvent
 
+###
+#Bachelorarbeit
+from Main import APIController
+###
+
 class Controller:
     
     def __init__(self):
+        self.initAPI()
         self.initManager()
         #self.startRestServer()
         self.start()
@@ -75,6 +85,11 @@ class Controller:
     def startRestServer(self):
         restServer = RestServer()
         restServer.start()
+
+    def initAPI(self):
+        api = APIController()
+        api.setupAPI()
+        api.startAPI()
 
     def initManager(self):
         deviceManager = DeviceManager()
