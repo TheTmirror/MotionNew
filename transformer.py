@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import sys
 sys.path.insert(0, '/home/pi/Desktop/Updated Project/math')
 from myMath import Interpolator, Calculator
@@ -86,6 +87,8 @@ class MotionTransformer:
             for i in range(len(transformedTime)):
                 event = RotationEvent(transformedTime[i], None, transformedSum[i])
                 transformedMotion.addEvent(event)
+        else:
+            print('Es wurde keine Rotation hinzugefügt')
 
         #Button Part of Motion
         if len(self.recordedButtons) > 0:
@@ -97,6 +100,8 @@ class MotionTransformer:
             for i in range(len(transformedTime)):
                 event = ButtonEvent(transformedTime[i], transformedValue[i])
                 transformedMotion.addEvent(event)
+        else:
+            print('Es wurde kein Button hinzugefügt')
                 
         #Touch Part of Motion
         for location in self.touches:
