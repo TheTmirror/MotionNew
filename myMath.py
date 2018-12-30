@@ -26,12 +26,12 @@ class Calculator:
         #print("IsDecimal: {} - Value: {}".format(isinstance(oddButton, Decimal), oddButton))
         #print("IsDecimal: {} - Value: {}".format(isinstance(oddTouch, Decimal), oddTouch))
 
-        odds = oddRotation * oddButton * oddTouch
-        #print("ODDS")
-        #print(oddTouch)
-        #print("Odds beofre: {}".format(odds))
+        odds = oddRotation * oddButton#BACHELORARBEIT * oddTouch
+        #print('OddsRotation: {}'.format(oddRotation))
+        #print('OddsButton: {}'.format(oddButton))
+        #print('OddsTouch: {}'.format(oddTouch))
+        #print('Odd: {}'.format(odds))
         odds = odds.normalize()
-        #print("Odds after: {}".format(odds))
         return odds
 
     def fillIntoDict(self, touchEvents):
