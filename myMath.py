@@ -148,17 +148,28 @@ class Calculator:
             if isinstance(event, ButtonEvent):
                 buttonEventsM2.append(event)
 
+        length = len(buttonEventsM1)
+
+        #Bei beiden wurden keine Buttons gedrückt = Minimale Differenz
+        if len(buttonEventsM1) == 0 and len(buttonEventsM2) == 0:
+            return Decimal('0')
+
+        #Eine der zwei Gesten hat keine Kopf Events, die andere schon. Es ist egal
+        #wieviele die andere hat, die Differenz ist dann immer maximal
+        #print('M1: {}'.format(len(buttonEventsM1) == 0))
+        #print('M2: {}'.format(len(buttonEventsM2) != 0))
+        if len(buttonEventsM1) == 0 and len(buttonEventsM2) != 0:
+            #print('THIS!')
+            return Decimal('1')
+        elif len(buttonEventsM1) != 0 and len(buttonEventsM2) == 0:
+            return Decimal('1')
+
+        #Dieser Fall tritt auf, wenn beide Gesten Knopfevents haben, aber eine
+        #unterschiedliche Anzahl. Dann handelt es sich um einen Fehler
         if len(buttonEventsM1) != len(buttonEventsM2):
             print("b1", len(buttonEventsM1))
             print("b2", len(buttonEventsM2))
             raise NameError('Es gab einen Fehler in der Button Länge')
-
-        length = len(buttonEventsM1)
-        
-        #Falls der Button nie Benutzt wurde
-        if length == 0:
-            #print('Achtung der Button wurde nie gedrückt')
-            return Decimal('0')
 
         for i in range(length):
             x = abs(buttonEventsM1[i].getValue() - buttonEventsM2[i].getValue())
@@ -188,10 +199,25 @@ class Calculator:
             if isinstance(event, RotationEvent):
                 rotationEventsM2.append(event)
 
-        if len(rotationEventsM1) != len(rotationEventsM2):
-            raise NameError('Es gab einen Fehler in der Rotation Länge')
-
         length = len(rotationEventsM1)
+
+        #Bei beiden wurde keine Rotation ausgeführt = Minimale Differenz
+        if len(rotationEventsM1) == 0 and len(rotationEventsM2) == 0:
+            return Decimal('0')
+
+        #Eine der zwei Gesten hat keine Rotations Events, die andere schon. Es ist egal
+        #wieviele die andere hat, die Differenz ist dann immer maximal
+        if len(rotationEventsM1) == 0 and len(rotationEventsM2) != 0:
+            return Decimal('1')
+        elif len(rotationEventsM1) != 0 and len(rotationEventsM2) == 0:
+            return Decimal('1')
+
+        #Dieser Fall tritt auf, wenn beide Gesten Knopfevents haben, aber eine
+        #unterschiedliche Anzahl. Dann handelt es sich um einen Fehler
+        if len(rotationEventsM1) != len(rotationEventsM2):
+            print("b1", len(rotationEventsM1))
+            print("b2", len(rotationEventsM2))
+            raise NameError('Es gab einen Fehler in der Button Länge')
 
         for i in range(length):
             x = abs(rotationEventsM1[i].getSum() - rotationEventsM2[i].getSum())
